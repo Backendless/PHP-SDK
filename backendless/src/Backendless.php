@@ -1,0 +1,168 @@
+<?php
+namespace backendless;
+
+use backendless\lib\Log;
+use backendless\services\UserService;
+use backendless\services\Persistence;
+use backendless\services\Geo;
+use backendless\services\Files;
+use backendless\services\Messaging;
+use backendless\services\Cache;
+use backendless\services\Counters;
+use backendless\services\Logging;
+
+use Exception;
+
+class Backendless
+{
+    
+    private static $url = "https://api.backendless.com";
+    
+    public static $UserService;
+    public static $Persistence;
+    public static $Data;
+    public static $Messaging;
+    public static $Geo;
+    public static $Events; 
+    public static $Cache;
+    public static $Counters;
+    public static $Logging;
+    public static $Files;
+
+    private static $application_id;
+    private static $secret_key;
+    private static $version;
+    
+    private static $classes_map = [];
+    
+    private function __construct() { }
+
+    public static function staticConstruct() {
+
+        self::$UserService = UserService::getInstance();
+        self::$Persistence = Persistence::getInstance();
+        self::$Data = Persistence::getInstance();
+        self::$Geo  = Geo::getInstance();
+        self::$Files  = Files::getInstance();
+        self::$Messaging = Messaging::getInstance();
+        self::$Cache = Cache::getInstance();
+        self::$Counters = Counters::getInstance();
+        self::$Logging = Logging::getInstance();
+        
+        self::mapTableToClass( "GeoPoint", "backendless\model\GeoPoint" );
+
+    }
+
+    public static function initApp( $application_id, $secret_key, $version ) {
+
+        if( $application_id != null && $application_id !== '' ) {
+            if( $secret_key != null && $secret_key != '' ) {
+                if( $version != null && $version != "" ) {
+
+                    self::$application_id = $application_id;
+                    self::$secret_key = $secret_key;
+                    self::$version = $version;
+
+                } else {
+
+                    throw new Exception("Version cannot be null");
+
+                }
+            } else {
+
+                throw new Exception("Secret key cannot be null");
+
+            }
+        } else {
+
+            throw new Exception("Application id cannot be null");
+
+        }
+        
+    }
+    
+    public static function setUrl( $api_url ) {
+        
+        self::$url = $api_url;
+        
+    }
+    
+    public static function getUrl() {
+        
+        return self::$url;
+        
+    }
+    
+    public static function getApplicationId() {
+        
+        if( !isset( self::$application_id) ) {
+            
+            throw new Exception("Backendless application was not initialized");
+            
+        } else {
+            
+            return self::$application_id;
+            
+        }
+        
+    }
+
+    public static function getSecretKey() {
+        
+        if( !isset( self::$secret_key) ) {
+            
+            throw new Exception("Backendless application was not initialized");
+            
+        } else {
+            
+            return self::$secret_key;
+            
+        }
+    }
+
+    public static function getVersion() {
+        
+        if( !isset( self::$version) ) {
+            
+            throw new Exception("Backendless application was not initialized");
+            
+        } else {
+            
+            return self::$version;
+            
+        }
+        
+    }
+    
+    public static function mapTableToClass( $table_name, $calss_name ) {
+        
+        self::$classes_map[$table_name] = ["class_name" => $calss_name ];
+        
+    }
+    
+    public static function getModelByClass( $class_name ) {
+        
+        if( isset( self::$classes_map[$class_name] ) ) {
+            
+            return self::$classes_map[$class_name]["class_name"];
+            
+        }
+        
+        return null;
+        
+    }
+    
+    public static function debug() {
+        
+        var_dump( self::$classes_map );
+    }
+    
+    public static function devMode() {
+        
+        define( "DEV_MODE", true );
+        Log::init();
+        
+    }
+    
+    
+} Backendless::staticConstruct(); 

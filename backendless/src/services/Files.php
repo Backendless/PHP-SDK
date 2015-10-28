@@ -1,0 +1,194 @@
+<?php
+namespace backendless\services;
+
+use backendless\services\files\File;
+use backendless\Backendless;
+use backendless\lib\HttpRequest;
+use backendless\lib\RequestBuilder;
+use Exception;
+
+class Files
+{
+    
+    protected static $instance;
+    
+    private static $APP_ID_KEY = "application-id";
+    private static $SECRET_KEY = "secret-key";
+    private static $VERSION = "AppVersion";
+    
+    private function __construct() {
+    
+    }
+
+    public static function getInstance() {
+        
+        if( !isset(self::$instance)) {
+            
+            self::$instance = new Files();
+            
+        }
+        
+        return self::$instance;
+        
+    }
+    
+    public function upload( $file, $remote_path = null ) {
+        
+        if( !is_object($file) ) {
+            
+            $path = $file;
+            $file = new File();
+            $file->setPath($path);
+            
+        }
+        
+        $file->validate();
+        
+        $target = Backendless::getUrl() . "/" . Backendless::getApplicationId(). "/" . Backendless::getVersion() . "/files"; 
+            
+        if( $remote_path !== null ) {
+            
+            $remote_path = trim($remote_path," \t\n\r\0\x0B\\");
+            $remote_path = str_replace("\\", "/", $remote_path);
+            
+            $target .= "/" . $remote_path;
+
+        }
+        
+        $target .= "/" . basename( $file->getPath() );
+
+        $http_request = new HttpRequest();
+
+        $multipart_boundary ="------BackendlessFormBoundary" . md5(uniqid()) . microtime(true);
+
+        $file_contents = file_get_contents($file->getPath());
+
+        $content =   "--". $multipart_boundary ."\r\n".
+                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"".basename( $file->getPath() )."\"\r\n".
+                     "Content-Type: application/json\r\n\r\n".
+                     $file_contents."\r\n";
+       
+        $content .= "--".$multipart_boundary."--\r\n";
+       
+        $http_request->setTargetUrl($target)
+                     ->setHeader(self::$APP_ID_KEY, Backendless::getApplicationId())
+                     ->setHeader(self::$SECRET_KEY, Backendless::getSecretKey())
+                     ->setHeader(self::$VERSION, Backendless::getVersion())
+                     ->setHeader('Content-type', ' multipart/form-data; boundary=' .$multipart_boundary )
+                     ->request( $content  );
+        
+        
+        if( $http_request->getResponseCode() != 200 ) {
+            
+            $error =  json_decode( $http_request->getResponse(), true );
+            
+            if( !isset($error['message']) ) {
+                
+                throw new Exception( "API responce " .$http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
+                
+            }else{
+                
+                throw new Exception( $error['message'], $error['code'] );
+                
+            }
+
+        }
+        
+        return json_decode( $http_request->getResponse(), true );
+        
+    }
+    
+    public function saveFile( $file_path_name, $file_content,  $overwrite = false ) {
+ 
+        $target = Backendless::getUrl() . "/" . Backendless::getApplicationId(). "/" . Backendless::getVersion() . "/files/binary/" . $file_path_name;
+        
+        if( $overwrite ) {
+            
+            $target .= "?overwrite=true"; 
+            
+        }
+
+        if( is_array( $file_content ) ) {
+            
+            $file_content = implode( $file_content );
+            
+        }
+        
+        $file_content = base64_encode( $file_content );
+            
+        $http_request = new HttpRequest();
+
+        $multipart_boundary ="------BackendlessFormBoundary" . md5(uniqid()) . microtime(true);
+
+        $content =   "--". $multipart_boundary ."\r\n".
+                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"".basename( $file_path_name )."\"\r\n".
+                     "Content-Type: text/plain\r\n\r\n".
+                     $file_content."\r\n";
+       
+        $content .= "--".$multipart_boundary."--\r\n";
+       
+        $http_request->setTargetUrl( $target )
+                     ->setHeader( self::$APP_ID_KEY, Backendless::getApplicationId() )
+                     ->setHeader( self::$SECRET_KEY, Backendless::getSecretKey() )
+                     ->setHeader( self::$VERSION, Backendless::getVersion() )
+                     ->setHeader('Content-type', ' multipart/form-data; boundary=' .$multipart_boundary )
+                     ->setHeader("application-type:", "REST")
+                     ->request( $content  );
+        
+        
+        if( $http_request->getResponseCode() != 200 ) {
+            
+            $error =  json_decode( $http_request->getResponse(), true );
+            
+            if( !isset($error['message']) ) {
+                
+                throw new Exception( "API responce " .$http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
+                
+            }else{
+                
+                throw new Exception( $error['message'], $error['code'] );
+                
+            }
+
+        }
+        
+        return json_decode( $http_request->getResponse(), true );
+        
+    }
+    
+    public function download( $file_path ) {
+                    
+        $file_path = trim($file_path);
+        $file_path = trim($file_path, "\\\/");
+        
+        $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
+        
+        $user_token = Backendless::$UserService->getUserToken();
+        
+        if( isset($user_token)  ) {
+            RequestBuilder::addHeader("user-token", $user_token);
+        }
+        
+        return RequestBuilder::Get( $url_part . '/files/' . $file_path);
+        
+    }
+    
+    public function remove( $file_path ) {
+        
+        $file_path = trim($file_path);
+        $file_path = trim($file_path, "\\\/");
+        
+        return RequestBuilder::doRequest('files', $file_path, '', 'DELETE');
+        
+    }
+    
+    public function removeDirectory( $directory_path ) {
+        
+        $directory_path = trim( $directory_path );
+        $directory_path = trim($directory_path, "\\\/");
+        
+        return RequestBuilder::doRequest('files', $directory_path, '', 'DELETE');
+        
+    }
+
+}
