@@ -35,6 +35,8 @@ class Backendless
     
     private static $classes_map = [];
     
+    private static $sdk_mode_bl = false;
+    
     private function __construct() { }
 
     public static function staticConstruct() {
@@ -149,6 +151,24 @@ class Backendless
         }
         
         return null;
+        
+    }
+    
+    public static function switchOnBlMode() {
+        
+        self::$sdk_mode_bl = true;
+        
+    }
+    
+    public static function switchOffBlMode() {
+        
+        self::$sdk_mode_bl = false;
+        
+    }
+    
+    public static function isBlMode() {
+        
+        return self::$sdk_mode_bl;
         
     }
     

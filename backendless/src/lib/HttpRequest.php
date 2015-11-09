@@ -2,6 +2,7 @@
 namespace backendless\lib;
 
 use backendless\lib\Log;
+use backendless\Backendless;
 
 class HttpRequest
 {
@@ -56,6 +57,12 @@ class HttpRequest
     public function request( $content, $method ='POST' ) {
         
         $this->resetResponse();
+        
+        if( Backendless::isBlMode() ) {
+            
+            $this->setHeader( "application-type", "BL" );
+            
+        }
         
         if( $content !== 'null' ) {
             
