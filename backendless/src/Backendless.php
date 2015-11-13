@@ -81,6 +81,8 @@ class Backendless
 
         }
         
+        self::phpEnviromentInit();
+        
     }
     
     public static function setUrl( $api_url ) {
@@ -170,6 +172,20 @@ class Backendless
         
         return self::$sdk_mode_bl;
         
+    }
+    
+     protected static function  phpEnviromentInit() {
+          
+        //set default timezone need for WIN and OS X
+        date_default_timezone_set('America/New_York');
+        
+        // check if available openssl for use https
+        if( ! extension_loaded("openssl") ) {
+            
+            self::$url = preg_replace('/^http:\/\/|https:\/\/(.*)$/', 'http://${1}', self::$url );
+            
+        }
+          
     }
     
     public static function debug() {
