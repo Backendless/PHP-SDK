@@ -177,7 +177,7 @@ class Backendless
      protected static function  phpEnviromentInit() {
           
         //set default timezone need for WIN and OS X
-        date_default_timezone_set('America/New_York');
+        date_default_timezone_set('UTC');
         
         // check if available openssl for use https
         if( ! extension_loaded("openssl") ) {
