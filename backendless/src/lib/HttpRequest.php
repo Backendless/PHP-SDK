@@ -66,8 +66,8 @@ class HttpRequest
         
         if( $content !== 'null' ) {
             
-            $this->request_headers['Content-length'] = mb_strlen( $content , '8bit' );    
-                    
+            $this->request_headers['Content-length'] = strlen( $content );    
+                                
         }
         
         $headers = [];
