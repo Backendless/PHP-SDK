@@ -10,6 +10,7 @@ use backendless\services\Messaging;
 use backendless\services\Cache;
 use backendless\services\Counters;
 use backendless\services\Logging;
+use backendless\services\Events;
 
 use Exception;
 
@@ -47,6 +48,7 @@ class Backendless
         self::$Geo  = Geo::getInstance();
         self::$Files  = Files::getInstance();
         self::$Messaging = Messaging::getInstance();
+        self::$Events   = Events::getInstance();
         self::$Cache = Cache::getInstance();
         self::$Counters = Counters::getInstance();
         self::$Logging = Logging::getInstance();
