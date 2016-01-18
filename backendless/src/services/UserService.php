@@ -184,5 +184,16 @@ class UserService
         
     }
     
+    public function getUserToken() {
+        
+        if( isset( $this->current_user ) ) {
+            
+            return $this->current_user->getUserToken();
+            
+        }
+        
+        return null;
+        
+    }
+    
 }
-
