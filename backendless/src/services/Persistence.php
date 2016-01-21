@@ -388,7 +388,7 @@ class Persistence
         if( isset( $data_array['table-name'] ) ) {
             
             unset( $data_array['table-name'] );
-            var_dump("call unset");
+            
         }
         
         return [ 'table' => $table_name, 'data' => $data_array, 'type' => $type ];

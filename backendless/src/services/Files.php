@@ -5,6 +5,7 @@ use backendless\services\files\File;
 use backendless\Backendless;
 use backendless\lib\HttpRequest;
 use backendless\lib\RequestBuilder;
+use backendless\model\BackendlessCollection;
 use Exception;
 
 class Files
@@ -165,7 +166,7 @@ class Files
         
         $user_token = Backendless::$UserService->getUserToken();
         
-        if( isset($user_token)  ) {
+        if( isset( $user_token )  ) {
             RequestBuilder::addHeader("user-token", $user_token);
         }
         
@@ -188,6 +189,142 @@ class Files
         $directory_path = trim($directory_path, "\\\/");
         
         return RequestBuilder::doRequest('files', $directory_path, '', 'DELETE');
+        
+    }
+    
+    public function renameFile( $old_path_mame, $new_name) {
+        
+        $file_path = trim( $old_path_mame );
+        $file_path = trim( $old_path_mame, "\\\/" );
+        $new_name = trim( $new_name );
+        $new_name = trim( $new_name, "\\\/" );
+        
+        $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
+        
+        $user_token = Backendless::$UserService->getUserToken();
+        
+        if( isset( $user_token )  ) {
+            
+            RequestBuilder::addHeader( "user-token", $user_token );
+            
+        }
+        
+        $request_body = [
+            
+            "oldPathName" => $old_path_mame,
+            "newName" => $new_name
+            
+        ];
+        
+        return RequestBuilder::doRequest( 'files', 'rename', $request_body, 'PUT' );
+        
+        
+    }
+    
+    public function copyFile( $source_path_name, $target_path ) {
+        
+        $source_path_name = trim( $source_path_name );
+        $source_path_name = trim( $source_path_name, "\\\/" );
+        $target_path = trim( $target_path );
+        $target_path = trim( $target_path, "\\\/" );
+        
+        $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
+        
+        $user_token = Backendless::$UserService->getUserToken();
+        
+        if( isset( $user_token )  ) {
+            
+            RequestBuilder::addHeader( "user-token", $user_token );
+            
+        }
+        
+        $request_body = [
+            
+            "sourcePath" => $source_path_name,
+            "targetPath" => $target_path
+            
+        ];
+        
+        return RequestBuilder::doRequest( 'files', 'copy', $request_body, 'PUT' );
+        
+    }
+    
+    public function moveFile( $source_path_name, $target_path ) {
+        
+        $source_path_name = trim( $source_path_name );
+        $source_path_name = trim( $source_path_name, "\\\/" );
+        $target_path = trim( $target_path );
+        $target_path = trim( $target_path, "\\\/" );
+        
+        $user_token = Backendless::$UserService->getUserToken();
+        
+        if( isset( $user_token )  ) {
+            
+            RequestBuilder::addHeader( "user-token", $user_token );
+            
+        }
+        
+        $request_body = [
+            
+            "sourcePath" => $source_path_name,
+            "targetPath" => $target_path
+            
+        ];
+        
+        return RequestBuilder::doRequest( 'files', 'move', $request_body, 'PUT' );
+        
+    } 
+    
+    public function listing( $path, $pattern = null, $recursive = false, $page_size = null, $offset = null ) {
+        
+        $path = trim( $path );
+        $path = trim( $path, "\\\/" );
+        $path = "/" . $path;
+        
+        $pattern = trim( $pattern );
+
+        $user_token = Backendless::$UserService->getUserToken();
+        
+        if( isset( $user_token )  ) {
+            
+            RequestBuilder::addHeader( "user-token", $user_token );
+            
+        }
+        
+        $url = "" ;
+        $url = $path;
+        
+        $query_data = [];
+        
+        if(  $pattern != null ) {
+            
+            $query_data["pattern"] = $pattern;
+            
+        }
+        
+        if(  $recursive != false ) {
+            
+            $query_data["sub"] = "true";
+            
+        }
+        
+        if(  $page_size != null && $offset != null ) {
+
+            $query_data['pagesize'] = $page_size;
+            $query_data['offset'] = $offset;
+            
+            
+        }
+        
+        $query = http_build_query( $query_data);
+        
+        if( !empty( $query ) ) {
+            
+            $url .="?" . $query;
+            
+        }
+
+        return new BackendlessCollection( RequestBuilder::doRequest( 'files', $url, '', 'GET' ) );
         
     }
 
