@@ -327,5 +327,20 @@ class Files
         return new BackendlessCollection( RequestBuilder::doRequest( 'files', $url, '', 'GET' ) );
         
     }
+    
+    public function exists( $file_path ) {
+
+        $file_path = trim( $file_path );
+        $file_path = trim( $file_path, "\\\/" );
+        
+        if( empty( $file_path ) ) {
+            
+            throw new Exception("File path variable empty");
+            
+        }
+        
+        return RequestBuilder::doRequest( 'files/exists', $file_path, '', 'GET' );
+        
+    }
 
 }
