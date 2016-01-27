@@ -27,31 +27,12 @@ class Cache
     public function put( $key, $value, $time_to_live ) {
         
         $data = base64_encode(serialize($value));
-
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
-            
-        }
         
         RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/cache/" . $key ."?timeout=".$time_to_live, $data, 'PUT' );
         
     }
     
     public function get( $key ) {
-
-        
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
-            
-        }
-        
-        RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/cache/" . $key, '', 'GET' );
         
         $result = RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/cache/" . $key, '', 'GET' );
         
@@ -60,29 +41,12 @@ class Cache
     }
     
     public function delete( $key ) {
-
-        
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
-            
-        }
         
         RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/cache/" . $key, '', 'DELETE' );
         
     }
     
     public function contains ($key) {
-
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
-            
-        }
         
          return RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/cache/" . $key . "/check", '', 'get' );
         

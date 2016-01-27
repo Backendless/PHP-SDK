@@ -76,7 +76,7 @@ class Messaging
             $this->prepareSubscribeData($data, $subscription_options);
         }
         
-        return RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/messaging/" . $ch . "/subscribe", $data, 'POST' );
+        return RequestBuilder::doRequestByUrl( Backendless::getUrl() . "/" . Backendless::getVersion() . "/messaging/" . $ch . "/subscribe", $data, 'POST' )['subscriptionId'];
         
     }
     
@@ -221,14 +221,6 @@ class Messaging
         if( $attachments !== null ) {
             
             $data["attachment"] = $attachments;
-            
-        }
-        
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
             
         }
         

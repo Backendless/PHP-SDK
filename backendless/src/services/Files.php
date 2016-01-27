@@ -70,6 +70,8 @@ class Files
                      $file_contents."\r\n";
        
         $content .= "--".$multipart_boundary."--\r\n";
+        
+        RequestBuilder::addUserTokenHeader( $http_request );
        
         $http_request->setTargetUrl($target)
                      ->setHeader(self::$APP_ID_KEY, Backendless::getApplicationId())
@@ -127,7 +129,9 @@ class Files
                      $file_content."\r\n";
        
         $content .= "--".$multipart_boundary."--\r\n";
-       
+        
+        RequestBuilder::addUserTokenHeader( $http_request );
+        
         $http_request->setTargetUrl( $target )
                      ->setHeader( self::$APP_ID_KEY, Backendless::getApplicationId() )
                      ->setHeader( self::$SECRET_KEY, Backendless::getSecretKey() )
@@ -164,12 +168,6 @@ class Files
         
         $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
         
-        $user_token = Backendless::$UserService->getUserToken();
-        
-        if( isset( $user_token )  ) {
-            RequestBuilder::addHeader("user-token", $user_token);
-        }
-        
         return RequestBuilder::Get( $url_part . '/files/' . $file_path);
         
     }
@@ -201,14 +199,6 @@ class Files
         
         $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
         
-        $user_token = Backendless::$UserService->getUserToken();
-        
-        if( isset( $user_token )  ) {
-            
-            RequestBuilder::addHeader( "user-token", $user_token );
-            
-        }
-        
         $request_body = [
             
             "oldPathName" => $old_path_mame,
@@ -230,14 +220,6 @@ class Files
         
         $url_part = Backendless::getUrl() . "/" . Backendless::getApplicationId() . "/" . Backendless::getVersion();
         
-        $user_token = Backendless::$UserService->getUserToken();
-        
-        if( isset( $user_token )  ) {
-            
-            RequestBuilder::addHeader( "user-token", $user_token );
-            
-        }
-        
         $request_body = [
             
             "sourcePath" => $source_path_name,
@@ -255,14 +237,6 @@ class Files
         $source_path_name = trim( $source_path_name, "\\\/" );
         $target_path = trim( $target_path );
         $target_path = trim( $target_path, "\\\/" );
-        
-        $user_token = Backendless::$UserService->getUserToken();
-        
-        if( isset( $user_token )  ) {
-            
-            RequestBuilder::addHeader( "user-token", $user_token );
-            
-        }
         
         $request_body = [
             
@@ -282,14 +256,6 @@ class Files
         $path = "/" . $path;
         
         $pattern = trim( $pattern );
-
-        $user_token = Backendless::$UserService->getUserToken();
-        
-        if( isset( $user_token )  ) {
-            
-            RequestBuilder::addHeader( "user-token", $user_token );
-            
-        }
         
         $url = "" ;
         $url = $path;

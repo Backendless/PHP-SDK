@@ -34,14 +34,13 @@ class Persistence
     
     public function of( $table_name ) {
         
-        // TODO add Validation;
         $this->table_name = $table_name;
         
         return $this;
         
     }
     
-    public function save( $data, $owner = null ) {
+    public function save( $data ) {
        
         $data_array = $this->convertDataToArray( $data );
         
@@ -56,20 +55,6 @@ class Persistence
                                                             );
                      
         } else {
-            
-            if( $owner !== null){
-            
-                if( is_string( $owner ) ) {
-
-                    RequestBuilder::addHeader( "user-token", $owner );
-
-                } else {
-
-                    RequestBuilder::addHeader( "user-token", $owner->getUserToken() );
-
-                }
-            
-        }
         
             return BackendlessCollection::prepareSingleItem( 
                                                              RequestBuilder::doRequest( 'data', $data_array['table'], $data_array['data'] ), 

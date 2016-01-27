@@ -66,7 +66,8 @@ class UserService
     
     public function update( $user ) {
         
-        self::checkUserToBeProperForUpdate($user);
+        
+        self::checkUserToBeProperForUpdate( $user );
         
         if( ( $user->getUserId() == null && $user->getUserId() == '') || ( $user->getUserToken() == null && $user->getUserToken() == '') ) {
         
@@ -74,8 +75,6 @@ class UserService
             
         } else {
        
-            RequestBuilder::addHeader( "user-token", $user->getUserToken());
-
             $user->putProperties( RequestBuilder::doRequest( 'users', $user->getUserId(), $user->exclude("user-token")->getProperties(), 'PUT' ) );
         
             return $user;
@@ -83,31 +82,7 @@ class UserService
         
     }
     
-    public function logout( $user ) {
-        
-        if( !isset( $user ) ) {
-            
-            throw new BackendlessException("Not set arguments, argument can be user model or user token as string.");
-            
-        }
-        
-        if( is_string( $user ) ) {
-            
-            RequestBuilder::addHeader( "user-token", $user );
-            
-        } else {
-            
-            if( $user->getUserToken() !== null ){
-            
-                RequestBuilder::addHeader( "user-token", $user->getUserToken() );
-                
-            }else{
-                
-                throw new BackendlessException("User model does not contain user-token property.");
-                
-            }
-            
-        }
+    public function logout( ) {
         
         RequestBuilder::doRequest('users', 'logout', null, 'GET');
         
@@ -155,7 +130,7 @@ class UserService
         
     }
     
-    public function unsetCurrentUser() {
+    protected function unsetCurrentUser() {
         
         unset( $this->current_user );
         
