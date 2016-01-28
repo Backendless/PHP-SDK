@@ -59,6 +59,8 @@ class RequestBuilder
             
         }
         
+        self::addUserTokenHeader( $http_request );
+        
         self::$headers = [];
                 
         $http_request->request( json_encode( $data_array ), $method );
@@ -104,6 +106,8 @@ class RequestBuilder
             
         }
         
+        self::addUserTokenHeader( $http_request );
+        
         self::$headers = [];
                 
         $http_request->request( json_encode( $data_array ), $method );
@@ -130,6 +134,8 @@ class RequestBuilder
             $http_request->setHeader( $heder_n, $h_val);
             
         }
+        
+        self::addUserTokenHeader( $http_request );
         
         self::$headers = [];
                 
@@ -160,4 +166,27 @@ class RequestBuilder
         }
         
     }
+    
+    public static function addUserTokenHeader( $http_request ) {
+        
+        $current_user = Backendless::$UserService->getCurrentUser();
+        
+        if( $current_user == null ) {
+            
+            return;
+            
+        }
+        
+        $user_token = $current_user->getUserToken();
+        
+        if( $user_token == null ) {
+            
+            return;
+            
+        }
+        
+        $http_request->setHeader( "user-token", $user_token );
+
+    }
+    
 }

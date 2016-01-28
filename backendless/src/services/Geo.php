@@ -382,14 +382,6 @@ class Geo
     
     private function runAction( $action_name, $geofence_name, $geopoint = null ) {
     
-        $user = Backendless::$UserService->getCurrentUser();
-        
-        if( $user != null ) {
-        
-            RequestBuilder::addHeader( "user-token", $owner->getUserToken());
-            
-        }
-        
         $url = "fence/" .$action_name . "?geoFence=" . $geofence_name;
         
         $headers = [];
