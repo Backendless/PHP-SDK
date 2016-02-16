@@ -171,7 +171,7 @@ class Persistence
         
         $relations_depth = ( $relations_depth === null )? "" : "?relationsDepth={$relations_depth}";
             
-        return new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() .'/'. $object_id . $relations_depth, null, 'GET') );
+        return ( new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() .'/'. $object_id . $relations_depth, null, 'GET') ) )->getAsClass();
         
     }
     
@@ -179,7 +179,7 @@ class Persistence
         
         $relations_depth = ( $relations_depth === null )? "" : "?relationsDepth={$relations_depth}";
       
-        return new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() . '/first' . $relations_depth, null, 'GET') );
+        return ( new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() . '/first' . $relations_depth, null, 'GET') ) )->getAsClass();
                 
     }
     
@@ -187,7 +187,7 @@ class Persistence
         
         $relations_depth = ( $relations_depth === null )? "" : "?relationsDepth={$relations_depth}";
         
-        return new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() . '/last' . $relations_depth, null, 'GET') );
+        return ( new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() . '/last' . $relations_depth, null, 'GET') ) )->getAsClass();
         
     }
     
