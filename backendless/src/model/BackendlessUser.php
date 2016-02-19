@@ -2,6 +2,7 @@
 namespace backendless\model;
 
 use backendless\model\Data;
+use backendless\exception\BackendlessException;
 
 class BackendlessUser extends Data {
    
@@ -27,10 +28,37 @@ class BackendlessUser extends Data {
         
         if ( isset( $this->data["user-token"] ) ) {
             
-            unset($this->data["user-token"]);
+            unset( $this->data["user-token"] );
+            
+        }
+        
+    }
+    
+    public function putProperties( $properties ) {
+        
+        if( is_array( $properties) ) {
+            
+            parent::putProperties( $properties );
+            
+        } else {
+            
+            throw new BackendlessException( '"putProperties" method argument "$properties" must be array' );
             
         }
         
     }
 
+    public function setProperties( $properties ) {
+        
+        if( is_array( $properties) ) {
+            
+            parent::setProperties( $properties );
+            
+        } else {
+            
+            throw new BackendlessException( '"setProperties" method argument "$properties" must be array' );
+            
+        }
+        
+    }
 }
