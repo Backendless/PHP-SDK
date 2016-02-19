@@ -13,9 +13,7 @@
     "require": {
         "php": ">=5.4.45"
     },
-    
     "minimum-stability": "dev",
-    
     "autoload": {
         "psr-4": {
             "backendless\\": "backendless/src"
