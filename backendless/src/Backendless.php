@@ -140,9 +140,9 @@ class Backendless
         
     }
     
-    public static function mapTableToClass( $table_name, $calss_name ) {
+    public static function mapTableToClass( $table_name, $class_name ) {
         
-        self::$classes_map[$table_name] = ["class_name" => $calss_name ];
+        self::$classes_map[$table_name] = ["class_name" => $class_name ];
         
     }
     

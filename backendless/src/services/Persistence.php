@@ -347,7 +347,7 @@ class Persistence
             } else {
                 
                 $data_array = $this->getRecursiveData( $data );
-                $type = 'user_calss';
+                $type = 'user_class';
                 
             }
             

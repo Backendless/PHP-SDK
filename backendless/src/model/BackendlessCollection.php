@@ -27,7 +27,7 @@ class BackendlessCollection {
             switch ( $convert_type ) {
                 
                 case "std_class":   return $collection_item->convertToStdClasses();
-                case "user_calss":  return $collection_item->convertToUserClasses();      
+                case "user_class":  return $collection_item->convertToUserClasses();      
                 case "array":       return $collection_item->convertToArray();
                     
             }
