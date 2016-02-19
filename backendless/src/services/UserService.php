@@ -106,7 +106,7 @@ class UserService
     
     public function getCurrentUser() {
         
-        $this->CurrentUser();
+        return $this->CurrentUser();
         
     }
     
