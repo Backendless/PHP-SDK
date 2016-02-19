@@ -1,0 +1,24 @@
+{
+    "name": "backendless/sdk-for-php",
+    "description": "Backendless SDK for PHP. Contains APIs to work with the cloud mobile backend provided by Backendless",
+    "keywords": ["backendless", "mBaaS", "BaaS", "cloud backend", "mobile backend", "API"],
+    "homepage": "https://backendless.com/",
+    "license": "Apache v2",
+    "authors": [
+        {
+            "name": "Backendless Corp",
+            "email":"info@backendless.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.45"
+    },
+    
+    "minimum-stability": "dev",
+    
+    "autoload": {
+        "psr-4": {
+            "backendless\\": "backendless/src"
+        }
+    }
+}
