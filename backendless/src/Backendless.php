@@ -29,6 +29,8 @@ class Backendless
     public static $Counters;
     public static $Logging;
     public static $Files;
+    
+    public static $InvocationContext;
 
     private static $application_id;
     private static $secret_key;
@@ -155,6 +157,12 @@ class Backendless
         }
         
         return null;
+        
+    }
+    
+    public static function setInvocationContext(  $invocation_context ) {
+        
+        self::$InvocationContext = $invocation_context;
         
     }
     
