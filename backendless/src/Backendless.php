@@ -56,6 +56,7 @@ class Backendless
         self::$Logging = Logging::getInstance();
         
         self::mapTableToClass( "GeoPoint", "backendless\model\GeoPoint" );
+        self::mapTableToClass( "Users", "backendless\model\BackendlessUser" );
 
     }
 
@@ -211,4 +212,4 @@ class Backendless
     }
     
     
-} Backendless::staticConstruct(); 
+} Backendless::staticConstruct();

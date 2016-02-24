@@ -1,14 +1,12 @@
 <?php
 namespace backendless\model;
 
-use backendless\model\Data;
 use backendless\exception\BackendlessException;
+use ReflectionClass;
 
-class BackendlessUser extends Data {
+class BackendlessUser{
    
     public function  __construct() {
-        
-        parent::__construct();
         
     }
 
@@ -20,15 +18,15 @@ class BackendlessUser extends Data {
     
     public function getUserToken() {
         
-        return ( isset( $this->data["user-token"] ) ) ? $this->data["user-token"] : null;
+        return ( isset( $this->{'user-token'} ) ) ? $this->{'user-token'} : null;
         
     }
     
     public function unsetUserToken() {
         
-        if ( isset( $this->data["user-token"] ) ) {
+        if ( isset( $this->{'user-token'} ) ) {
             
-            unset( $this->data["user-token"] );
+            unset( $this->{'user-token'} );
             
         }
         
@@ -38,7 +36,11 @@ class BackendlessUser extends Data {
         
         if( is_array( $properties) ) {
             
-            parent::putProperties( $properties );
+            foreach ( $properties as $key=>$value ) {
+                
+                $this->{ $key } = $value;
+                        
+            }
             
         } else {
             
@@ -50,9 +52,30 @@ class BackendlessUser extends Data {
 
     public function setProperties( $properties ) {
         
+        $props = ( new ReflectionClass( $this ) )->getProperties();
+
+        foreach ( $props as $prop ) {
+
+            $prop->setAccessible( true );
+            unset( $this->{ $prop->getName() });
+            
+        }
+        
+        $object_vars = get_object_vars( $this );
+        
+        foreach ( $object_vars as $name=>$val ) {
+
+            unset( $this->{ $name });
+            
+        }
+                
         if( is_array( $properties) ) {
             
-            parent::setProperties( $properties );
+            foreach ( $properties as $key=>$value ) {
+                
+                $this->{ $key } = $value;
+                        
+            }
             
         } else {
             
@@ -61,4 +84,78 @@ class BackendlessUser extends Data {
         }
         
     }
+    
+    public function setProperty( $key, $value) {
+        
+        $this->{ $key }  = $value;
+        
+    }
+    
+    public function getProperty( $key ) {
+        
+        if( isset( $this->{ $key } ) ) {
+            
+            return $this->{ $key };
+            
+        }
+        
+        return null;
+        
+    }
+    
+    public function getProperties() {
+        
+        $data_array = [];
+        
+        $props = ( new ReflectionClass( $this ) )->getProperties();
+
+        foreach ( $props as $prop ) {
+
+            $prop->setAccessible( true );
+            $data_array[] = $prop->getValue();
+            
+        }
+        
+        $object_vars = get_object_vars( $this );
+        
+        return array_merge( $data_array, $object_vars );
+        
+    }
+    
+    public function __call( $name, $arguments ) {
+        
+        $action_name = substr( $name, 0, 3 );
+        $property = substr( $name, 3 );
+        
+        $property = lcfirst( $property );
+        
+        switch ( $action_name ) {
+            
+            case 'set': $this->setProperty( $property, $arguments[0] ); break;
+            
+            case 'get': return $this->getProperty( $property );
+                
+            default :   $action_name = substr( $name, 0, 5 );
+                        $property = substr( $name, 5 );
+        
+                        $property = lcfirst( $property );
+        
+                        if( $action_name === 'unset' ) {
+
+                            if( isset( $this->{ $property } ) ) {
+
+                            unset( $this->{ $property } );
+
+                            }
+
+                        } else {
+                
+                            throw  new Exception( "Called undefined function $name." );
+                            
+                        }
+                
+        }
+        
+    }
+        
 }
