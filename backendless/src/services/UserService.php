@@ -75,7 +75,7 @@ class UserService
             
         } else {
        
-            $user->putProperties( RequestBuilder::doRequest( 'users', $user->getUserId(), $user->exclude("user-token")->getProperties(), 'PUT' ) );
+            $user->putProperties( RequestBuilder::doRequest( 'users', $user->getUserId(), $user->getProperties(), 'PUT' ) );
         
             return $user;
         }
@@ -123,7 +123,7 @@ class UserService
     }
     
     public function setCurrentUser( $user ) {
-                
+        
         if ( is_a( $user, '\backendless\model\BackendlessUser' ) ) {
             
             $this->current_user = $user;

@@ -150,7 +150,7 @@ class BackendlessUser{
 
                         } else {
                 
-                            throw  new Exception( "Called undefined function $name." );
+                            throw  new BackendlessException( "Called undefined function $name." );
                             
                         }
                 
