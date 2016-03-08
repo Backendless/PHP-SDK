@@ -206,13 +206,15 @@ class BackendlessDataQuery {
         
         if( isset($this->sort_by) && count($this->sort_by) == 1 && is_array($this->sort_by) ) {
             
-            $var_array['sort_by'] =  "sortBy=" . $this->sort_by[0];
+            $var_array['sort_by'] = "sortBy=" . urlencode( $this->sort_by[ 0 ] );
             
         }elseif( isset($this->sort_by) && is_array($this->sort_by) && !empty($this->sort_by) ){
             
-            $var_array['sort_by'] =  "sortBy=" . implode( ',' , $this->sort_by);
+            $var_array['sort_by'] =  "sortBy=" . urlencode( implode( ',' , $this->sort_by) );
             
         }
+        
+        var_dump($var_array['sort_by']);
         
         $var_array['offset'] = null;
         
