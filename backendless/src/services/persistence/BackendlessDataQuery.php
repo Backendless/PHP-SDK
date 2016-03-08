@@ -214,8 +214,6 @@ class BackendlessDataQuery {
             
         }
         
-        var_dump($var_array['sort_by']);
-        
         $var_array['offset'] = null;
         
         if( isset($this->offset) ) {
