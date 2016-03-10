@@ -54,9 +54,9 @@ class DeliveryOptions {
         
     }    
     
-    public function addPushSinglecast( $name, $val ) {
+    public function addPushSinglecast( $val ) {
         
-        $this->push_singlecast[$name] = $val;
+        $this->push_singlecast[ ] = $val;
         return $this;
         
     }
@@ -99,9 +99,5 @@ class DeliveryOptions {
         return $this->repeat_expires_at;
         
     }    
-    
-    
-   
-    
-      
+        
 }
