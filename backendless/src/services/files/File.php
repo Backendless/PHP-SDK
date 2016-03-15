@@ -5,9 +5,7 @@ use Exception;
 
 class File {
 
-    //upload 
     private $path;
-    //upload binary
     private $file_name;
     private $file_content;
     private $overwrite= false;
@@ -41,6 +39,12 @@ class File {
     
     
     public function getFileName() {
+        
+        if( empty( $this->file_name ) ) {
+            
+            $this->file_name = basename( $this->path );
+            
+        }
         
         return $this->file_name;
         

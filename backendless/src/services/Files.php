@@ -39,7 +39,7 @@ class Files
             
             $path = $file;
             $file = new File();
-            $file->setPath($path);
+            $file->setPath( $path );
             
         }
         
@@ -56,8 +56,8 @@ class Files
 
         }
         
-        $target .= "/" . basename( $file->getPath() );
-
+        $target .= "/" . $file->getFileName();
+                
         $http_request = new HttpRequest();
 
         $multipart_boundary ="------BackendlessFormBoundary" . md5(uniqid()) . microtime(true);
@@ -65,7 +65,7 @@ class Files
         $file_contents = file_get_contents($file->getPath());
 
         $content =   "--". $multipart_boundary ."\r\n".
-                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"".basename( $file->getPath() )."\"\r\n".
+                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"" . $file->getFileName() . "\"\r\n".
                      "Content-Type: application/json\r\n\r\n".
                      $file_contents."\r\n";
        
