@@ -15,6 +15,9 @@ class Persistence
 {
     
     protected $table_name;
+    protected $aliases = [
+                            "BackendlessUser" => "Users"
+                         ];
     
     protected static $instance;
     
@@ -417,6 +420,12 @@ class Persistence
             unset( $data_array['table_name'] );
         }
         
+        if( isset( $this->aliases[ $data_array['___class'] ] ) ){
+            
+            $data_array['___class'] = $this->aliases[ $data_array['___class'] ];
+            
+        }
+        
         if( $data_array['___class'] == "GeoPoint" ) {
                         
             $this->clearGeoPoint( $data_array );
@@ -473,6 +482,12 @@ class Persistence
 
                 $data["___class"] = $data["table-name"];
                 unset( $data["table-name"] );
+                
+                if( isset( $this->aliases[ $data['___class'] ] ) ) {
+            
+                    $data['___class'] = $this->aliases[ $data['___class'] ];
+            
+                }
 
                 foreach ( $data as $property_name => $property_value  ) {
 
@@ -480,10 +495,16 @@ class Persistence
 
                         if( isset( $property_value["table-name"] ) ) {
 
-                            $data[$property_name]["___class"] = $property_value["table-name"];
-                            unset($data[$property_name]["table-name"]);
+                            $data[ $property_name ][ '___class' ] = $property_value[ 'table-name' ];
+                            unset( $data[ $property_name ][ 'table-name'] );
+                            
+                            if( isset( $this->aliases[ $data[ $property_name ][ '___class' ] ] ) ) {
+            
+                                $data[ $property_name ][ '___class' ] = $this->aliases[ $data[ $property_name ][ '___class' ] ];
+            
+                            }
 
-                            $this->prepareArray( $data[$property_name] );
+                            $this->prepareArray( $data[ $property_name ] );
 
                         }
 
