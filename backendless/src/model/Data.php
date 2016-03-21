@@ -80,7 +80,7 @@ class Data {
     
     public function setProperty( $key, $value) {
         
-        $this->{ $key }  = $value;
+        $this->{ $key } = $value;
         
     }
     
@@ -121,10 +121,10 @@ class Data {
          $property = substr( $name, 3 );
 
          $property = lcfirst( $property );
-
+         
          switch ( $action_name ) {
 
-             case 'set': $this->setProperty( $property, $arguments[0] ); break;
+             case 'set': $this->setProperty( $property, $arguments[ 1 ] ); break;
 
              case 'get': return $this->getProperty( $property );
 
