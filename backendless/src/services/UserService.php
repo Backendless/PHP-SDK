@@ -92,15 +92,21 @@ class UserService
     
     public function restorePassword( $identity ) {
         
-        if( !isset($identity) || $identity == null) {
+        if( !isset( $identity ) || $identity == null ) {
             
-            throw new BackendlessException("Identity cannot be null");
+            throw new BackendlessException( 'Identity cannot be null' );
             
         } else {
             
-            RequestBuilder::doRequest('users','restorepassword/' . urlencode($identity), null, 'GET' );
+            RequestBuilder::doRequest( 'users', 'restorepassword/' . urlencode( $identity ), null, 'GET' );
             
         }
+        
+    }
+    
+    public function resendEmailConfirmation( $email_address ) {
+        
+        RequestBuilder::doRequest( 'users', 'resendconfirmation?email=' . $email_address , null, 'POST' );
         
     }
     
