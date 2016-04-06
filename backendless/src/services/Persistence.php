@@ -356,13 +356,17 @@ class Persistence
             
         } else {
             
-            if( isset( $data['table-name'] ) ) {
+            if( isset( $data[ 'table-name' ] ) ) {
                 
-                $table_name = $data['table-name'];
+                $table_name = $data[ 'table-name' ];
+                
+            } elseif( isset( $data[ '___class' ] ) ) {
+                
+                $table_name = $data[ '___class' ];
                 
             } else {
-            
-                throw new BackendlessException('Missing "table-name" in data multi array');
+                            
+                throw new BackendlessException( 'Missing "table-name" in data multi array' );
                 
             }
             

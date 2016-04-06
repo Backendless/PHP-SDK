@@ -144,8 +144,15 @@ class Backendless
     }
     
     public static function mapTableToClass( $table_name, $class_name ) {
+
+        if ( ! class_exists( $class_name ) ) {
+
+            throw new Exception( 'Class ' . $class_name . ' not available. Please verify class name and verify that the set fully qualified name of the class with a namespace.'
+                                . ' Also make sure that the class or namespace for class is added to autoloading using the method BackendlessAutoloader::addNamespace ( $namespace, $path )' );
+            
+        }
         
-        self::$classes_map[$table_name] = ["class_name" => $class_name ];
+        self::$classes_map[ $table_name ] = [ 'class_name' => $class_name ];
         
     }
     
