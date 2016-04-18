@@ -36,6 +36,7 @@ class Backendless
     private static $secret_key;
     private static $version;
     
+    private static $ignore_map_exception = false;    
     private static $classes_map = [];
     
     private static $sdk_mode_bl = false;
@@ -142,10 +143,16 @@ class Backendless
         }
         
     }
+
+    public static function ignoreMapException() {
+        
+        self::$ignore_map_exception = true;
+        
+    }
     
     public static function mapTableToClass( $table_name, $class_name ) {
 
-        if ( ! class_exists( $class_name ) ) {
+        if ( ! class_exists( $class_name ) && self::$ignore_map_exception == false ) {
 
             throw new Exception( 'Class ' . $class_name . ' not available. Please verify class name and verify that the set fully qualified name of the class with a namespace.'
                                 . ' Also make sure that the class or namespace for class is added to autoloading using the method BackendlessAutoloader::addNamespace ( $namespace, $path )' );

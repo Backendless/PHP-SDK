@@ -159,7 +159,7 @@ class RequestBuilder
                 
             }else{
                 
-                throw new BackendlessException( "Backendless API return error: " . $error['message'] .". Error code:" .$error['code'] , $error['code'] );
+                throw new BackendlessException( "Backendless API return error: " . $error['message'] . " Error code:" .$error['code'] , $error['code'] );
                 
             }
 

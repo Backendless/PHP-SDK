@@ -727,6 +727,12 @@ class Persistence
             
         }
         
+        if( isset( $this->aliases[ $table_name ] ) ) {
+            
+            $table_name = $this->aliases[ $table_name ];
+            
+        }
+        
         return $table_name;
         
     }
