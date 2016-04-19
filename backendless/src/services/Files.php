@@ -101,15 +101,21 @@ class Files
         
     }
     
-    public function saveFile( $file_path_name, $file_content,  $overwrite = false ) {
- 
-        $target = Backendless::getUrl() . "/" . Backendless::getApplicationId(). "/" . Backendless::getVersion() . "/files/binary/" . $file_path_name;
+    public function saveFile( $file_path_name, $file_content = '',  $overwrite = false ) {
         
-        if( $overwrite ) {
+        if( is_object( $file_path_name ) ) {
             
-            $target .= "?overwrite=true"; 
+            $overwrite = $file_path_name->getOverwrite();
+            $file_content = $file_path_name->getFileContent();
+            $file_path_name = $file_path_name->getPathWithName();
             
         }
+        
+        $file_path_name = trim( $file_path_name, " \t\n\r\0\x0B/" );
+         
+        $target = Backendless::getUrl() . "/" . Backendless::getApplicationId(). "/" . Backendless::getVersion() . "/files/binary/" . $file_path_name;
+        
+        if( $overwrite ) {  $target .= "?overwrite=true";  }
 
         if( is_array( $file_content ) ) {
             
@@ -118,17 +124,17 @@ class Files
         }
         
         $file_content = base64_encode( $file_content );
-            
+        
         $http_request = new HttpRequest();
 
-        $multipart_boundary ="------BackendlessFormBoundary" . md5(uniqid()) . microtime(true);
+        $multipart_boundary ="------BackendlessFormBoundary" . md5( uniqid() ) . microtime( true );
 
-        $content =   "--". $multipart_boundary ."\r\n".
-                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"".basename( $file_path_name )."\"\r\n".
+        $content =   "--" . $multipart_boundary . "\r\n".
+                     "Content-Disposition: form-data; name=\"model-file\"; filename=\"" . basename( $file_path_name ) . "\"\r\n".
                      "Content-Type: text/plain\r\n\r\n".
                      $file_content."\r\n";
        
-        $content .= "--".$multipart_boundary."--\r\n";
+        $content .= "--" . $multipart_boundary . "--\r\n";
         
         RequestBuilder::addUserTokenHeader( $http_request );
         
@@ -136,8 +142,8 @@ class Files
                      ->setHeader( self::$APP_ID_KEY, Backendless::getApplicationId() )
                      ->setHeader( self::$SECRET_KEY, Backendless::getSecretKey() )
                      ->setHeader( self::$VERSION, Backendless::getVersion() )
-                     ->setHeader('Content-type', ' multipart/form-data; boundary=' .$multipart_boundary )
-                     ->setHeader("application-type:", "REST")
+                     ->setHeader( 'Content-type', 'multipart/form-data; boundary=' . $multipart_boundary )
+                     ->setHeader( 'application-type:', 'REST' )
                      ->request( $content  );
         
         
@@ -145,13 +151,13 @@ class Files
             
             $error =  json_decode( $http_request->getResponse(), true );
             
-            if( !isset($error['message']) ) {
+            if( !isset( $error[ 'message' ] ) ) {
                 
-                throw new Exception( "API responce " .$http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
+                throw new Exception( "API responce " . $http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
                 
             }else{
                 
-                throw new Exception( $error['message'], $error['code'] );
+                throw new Exception( $error[ 'message' ], $error[ 'code' ] );
                 
             }
 
