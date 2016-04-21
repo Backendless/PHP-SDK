@@ -8,7 +8,6 @@ use backendless\model\BackendlessCollection;
 use ReflectionClass;
 use ReflectionProperty;
 use backendless\exception\BackendlessException;
-use Exception;
 
 
 class Persistence
@@ -16,7 +15,7 @@ class Persistence
     
     protected $table_name;
     protected $aliases = [
-                            "BackendlessUser" => "Users"
+                            'BackendlessUser' => 'Users'
                          ];
     
     protected static $instance;
@@ -25,7 +24,7 @@ class Persistence
 
     public static function getInstance() {
         
-        if( !isset(self::$instance)) {
+        if( !isset( self::$instance ) ) {
             
             self::$instance = new Persistence();
             
@@ -752,5 +751,4 @@ class Persistence
             
      }
      
-    
 }

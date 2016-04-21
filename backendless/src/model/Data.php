@@ -1,7 +1,7 @@
 <?php
 namespace backendless\model;
 
-use Exception;
+use backendless\exception\BackendlessException;
 
 class Data {
    
@@ -56,7 +56,7 @@ class Data {
         
         $object_vars = get_object_vars( $this );
         
-        foreach ( $object_vars as $name=>$val ) {
+        foreach ( $object_vars as $name => $val ) {
 
             unset( $this->{ $name });
             
@@ -64,7 +64,7 @@ class Data {
                 
         if( is_array( $properties) ) {
             
-            foreach ( $properties as $key=>$value ) {
+            foreach ( $properties as $key => $value ) {
                 
                 $this->{ $key } = $value;
                         
@@ -137,13 +137,13 @@ class Data {
 
                              if( isset( $this->{ $property } ) ) {
 
-                             unset( $this->{ $property } );
+                                unset( $this->{ $property } );
 
                              }
 
                          } else {
 
-                             throw  new Exception( "Called undefined function $name." );
+                             throw  new BackendlessException( "Called undefined function $name." );
 
                          }
 

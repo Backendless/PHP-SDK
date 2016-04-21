@@ -9,7 +9,7 @@ use backendless\services\Persistence;
 use backendless\Backendless;
 use backendless\exception\BackendlessException;
 use backendless\model\BackendlessCollection;
-use Exception;
+
 
 class Geo
 {
@@ -38,7 +38,7 @@ class Geo
         
         if( is_object( $category ) ) {
             
-            if( is_a( $category, "stdClass") ) {
+            if( is_a( $category, "stdClass" ) ) {
                 
                 $category_name = $category->name;
                 
@@ -48,13 +48,13 @@ class Geo
                 
             }
             
-        } elseif( is_string($category) ) {
+        } elseif( is_string( $category ) ) {
             
             $category_name = $category;
             
-        } elseif( is_array($category) ) {
+        } elseif( is_array( $category ) ) {
          
-            $category_name = $category['name'];
+            $category_name = $category[ 'name' ];
             
         } 
         
@@ -62,7 +62,7 @@ class Geo
         
         if( is_object( $category ) ) {
             
-            if( is_a( $category, "stdClass") ) {
+            if( is_a( $category, "stdClass" ) ) {
                 
                 foreach ( $result as $prop_name => $val) {
                     
@@ -72,15 +72,15 @@ class Geo
                 
             } else {
                 
-                $props = (new ReflectionClass($category))->getProperties();
+                $props = (new ReflectionClass( $category ))->getProperties();
 
-                foreach ( $props as $prop) {
+                foreach ( $props as $prop ) {
 
-                    $prop->setAccessible(true);
+                    $prop->setAccessible( true );
 
-                    if( isset($result[$prop->getName()]) ) {
+                    if( isset( $result[ $prop->getName() ] ) ) {
 
-                        $prop->setValue($category, $result[$prop->getName()] );
+                        $prop->setValue( $category, $result[ $prop->getName() ] );
 
                     }
             
@@ -150,13 +150,13 @@ class Geo
         
         if( $categories != null ) {
             
-            if( !is_array( $categories) ) { throw new BackendlessException('Variable $categories must be set as array.'); }
+            if( !is_array( $categories) ) { throw new BackendlessException( 'Variable $categories must be set as array.' ); }
             
         }
         
         if( $metadata != null ) {
             
-            if( !is_array( $metadata ) ) { throw new BackendlessException('Variable $metadata must be set as array.'); }
+            if( !is_array( $metadata ) ) { throw new BackendlessException( 'Variable $metadata must be set as array.' ); }
             
         }
         
@@ -226,7 +226,7 @@ class Geo
 
         if( $point->getObjectId() == null  ) {
             
-            throw new Exception("GeoPoint object missing objectId property needed for update");
+            throw new BackendlessException( 'GeoPoint object missing objectId property needed for update' );
             
         }
         
@@ -285,7 +285,7 @@ class Geo
                 
             } else {
                 
-                throw new Exception("GeoPoint object missing objectId property needed for remove point");
+                throw new BackendlessException( 'GeoPoint object missing objectId property needed for remove point' );
                 
             }
             
@@ -295,13 +295,13 @@ class Geo
             
         }
         
-        RequestBuilder::doRequest( 'geo', 'points/' . $point_id , '', 'DELETE'); // API return null if success
+        RequestBuilder::doRequest( 'geo', 'points/' . $point_id , '', 'DELETE' ); // API return null if success
         
     }
     
     public function getPoints( $geo_query ) {
         
-        return new BackendlessCollection( RequestBuilder::doRequest( 'geo', $geo_query->buildUrl(), '', 'GET')['collection'] );
+        return new BackendlessCollection( RequestBuilder::doRequest( 'geo', $geo_query->buildUrl(), '', 'GET')[ 'collection' ] );
         
     }
     
@@ -317,25 +317,25 @@ class Geo
             
         }
         
-        return new BackendlessCollection( RequestBuilder::doRequest( 'geo', $url, null, 'GET')['collection'] );
+        return new BackendlessCollection( RequestBuilder::doRequest( 'geo', $url, null, 'GET')[ 'collection' ] );
         
     }
     
     public function runOnEnterAction( $geofence_name, $geopoint = null ) {
         
-        return $this->runAction($action_name = "onenter" , $geofence_name, $geopoint);
+        return $this->runAction( $action_name = 'onenter', $geofence_name, $geopoint );
     
     }
     
     public function runOnStayAction( $geofence_name, $geopoint = null ) {
         
-        return $this->runAction($action_name = "onstay" , $geofence_name, $geopoint);
+        return $this->runAction( $action_name = 'onstay', $geofence_name, $geopoint );
     
     }
     
     public function runOnExitAction( $geofence_name, $geopoint = null ) {
         
-        return $this->runAction($action_name = "onexit" , $geofence_name, $geopoint);
+        return $this->runAction( $action_name = 'onexit', $geofence_name, $geopoint );
     
     }
     
@@ -343,35 +343,35 @@ class Geo
     
     private function prepareGeoPointDataBeforeSave( &$point_array ) {
         
-        if( count( $point_array['metadata'] ) >= 1 ) {
+        if( count( $point_array[ 'metadata' ] ) >= 1 ) {
             
             $persistance = Persistence::getInstance();
-            $persistance->prepareGeoPointMetadata( $point_array['metadata'] );
+            $persistance->prepareGeoPointMetadata( $point_array[ 'metadata' ] );
             
         }
         
-        $point_array['metadata'] = json_encode( $point_array['metadata'] );
+        $point_array[ 'metadata' ] = json_encode( $point_array[ 'metadata' ] );
         
     }
     
     private function setDataToObject( &$object, $data ) {
     
-        $props = (new ReflectionClass($object))->getProperties();
+        $props = (new ReflectionClass( $object ))->getProperties();
 
             foreach ( $props as $prop) {
 
-                $prop->setAccessible(true);
+                $prop->setAccessible( true );
             
-                if( isset($data[$prop->getName()]) ) {
+                if( isset( $data[ $prop->getName() ] ) ) {
                 
-                    $prop->setValue( $object, $data[$prop->getName()] );
-                    unset($data[$prop->getName()]);
+                    $prop->setValue( $object, $data[ $prop->getName() ] );
+                    unset( $data[ $prop->getName() ] );
                 
                 }
             
             }
             
-            foreach ( $data as $key => $val) {
+            foreach ( $data as $key => $val ) {
 
                 $object->{$key} = $val;
 
@@ -393,7 +393,7 @@ class Geo
          
         if( $geopoint !== null ) {
             
-            if( is_object($geopoint) ) {
+            if( is_object( $geopoint ) ) {
                 
                 $geopoint_data['latitude'] = $geopoint->getLatitude();
                 $geopoint_data['longitude'] = $geopoint->getLongitude();

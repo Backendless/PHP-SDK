@@ -32,11 +32,11 @@ class HttpRequest
 
     public function setTargetUrl( $target ) {
         
-        $target = trim($target);
+        $target = trim( $target );
         
-        if( ! preg_match("/http:\/\/|https:\/\//", $target, $matches) ) {
+        if( ! preg_match( "/http:\/\/|https:\/\//", $target, $matches ) ) {
             
-            $target = "http://" . $target;
+            $target = 'http://' . $target;
             
         }
         
@@ -54,19 +54,19 @@ class HttpRequest
         
     }
     
-    public function request( $content, $method ='POST' ) {
+    public function request( $content, $method = 'POST' ) {
         
         $this->resetResponse();
         
         if( Backendless::isBlMode() ) {
             
-            $this->setHeader( "application-type", "BL" );
+            $this->setHeader( 'application-type', 'BL' );
             
         }
         
         if( $content !== 'null' ) {
             
-            $this->request_headers['Content-length'] = strlen( $content );    
+            $this->request_headers[ 'Content-length' ] = strlen( $content );    
                                 
         }
         
@@ -75,9 +75,8 @@ class HttpRequest
         if( is_array( $this->request_headers ) ) {
             
             $headers = array_map( 
-                                    function ($v, $k) { 
-                                        return sprintf("%s: %s", $k, $v); 
-
+                                    function ( $v, $k ) { 
+                                        return sprintf( "%s: %s", $k, $v ); 
                                     }, 
 
                                     $this->request_headers,
@@ -128,7 +127,7 @@ class HttpRequest
     
     public function getResponseCode(){
 
-        if( isset($this->response_code) ) {
+        if( isset( $this->response_code ) ) {
             
             return $this->response_code;
             
@@ -144,7 +143,7 @@ class HttpRequest
    
     public function getResponseStatus() {
         
-        if( isset($this->response_status) ) {
+        if( isset( $this->response_status ) ) {
             
             return $this->response_status;
             
@@ -159,11 +158,11 @@ class HttpRequest
     
     protected function parseResponseCode() {
         
-        foreach ($this->response_headers as $key => $header) {
+        foreach ( $this->response_headers as $key => $header ) {
             
-            if (strpos($header, 'HTTP') !== FALSE) {
+            if ( strpos( $header, 'HTTP' ) !== false ) {
                 
-                list( ,  $this->response_code, $this->response_status) = explode( ' ', $header );
+                list( , $this->response_code, $this->response_status) = explode( ' ', $header );
                 
             }
         }
@@ -172,14 +171,14 @@ class HttpRequest
     
     public function getResponseHeader( $header ) {
         
-        if( isset($this->response_headers) ) {
+        if( isset( $this->response_headers ) ) {
             
-            foreach ($this->response_headers as $key => $response_header) {
+            foreach ( $this->response_headers as $key => $response_header ) {
             
-                if ( stripos($response_header, $header) !== false ) {
+                if ( stripos( $response_header, $header ) !== false ) {
 
-                    list($headername, $headervalue) = explode(":", $response_header);
-                    return trim($headervalue);
+                    list( $headername, $headervalue ) = explode( ":", $response_header );
+                    return trim( $headervalue );
 
                 }
             }
@@ -197,33 +196,33 @@ class HttpRequest
     
     private function beforeRequest( &$http, $method ) {
         
-        if( defined( "DEV_MODE" ) ) {
+        if( defined( 'DEV_MODE' ) ) {
             
-            Log::writeInfo( "---------------------------------------------------------------------------------------------", "file");
-            Log::writeInfo( "Request to: " . $this->target_url , "file");
-            Log::writeInfo( "Method: " . $method , "file");
+            Log::writeInfo( '---------------------------------------------------------------------------------------------', 'file' );
+            Log::writeInfo( 'Request to: ' . $this->target_url , 'file' );
+            Log::writeInfo( 'Method: ' . $method , 'file' );
             
-            if( isset( $http['content'] ) ) {
+            if( isset( $http[ 'content' ] ) ) {
                 
-                Log::writeInfo( "Request content: '" .  $http['content'] . "'", "file");
+                Log::writeInfo( 'Request content: \'' .  $http[ 'content' ] . '\'', 'file' );
                 
             }
         
-            echo "\n";
-            Log::writeInfo("Send request...", $target='console');
+            echo '\n';
+            Log::writeInfo( 'Send request...', 'console' );
             
         }
     }
     
     private function afterRequest() {
         
-        if( defined( "DEV_MODE" ) ) {
+        if( defined( 'DEV_MODE' ) ) {
         
-            Log::writeInfo( "Server response: " . $this->getResponse(), "file");
-            Log::writeInfo( "---------------------------------------------------------------------------------------------", "file");
+            Log::writeInfo( 'Server response: ' . $this->getResponse(), 'file' );
+            Log::writeInfo( '---------------------------------------------------------------------------------------------', 'file' );
             
-            echo "\n";
-            Log::writeInfo("Processing results", $target='console');
+            echo 'n';
+            Log::writeInfo( 'Processing results', 'console' );
             
         }
         

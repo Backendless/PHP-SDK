@@ -1,7 +1,7 @@
 <?php
 namespace backendless\services\files;
 
-use Exception;
+use backendless\exception\BackendlessException;
 
 class File {
 
@@ -26,7 +26,7 @@ class File {
         
         if( ! file_exists( $this->path ) ) {
             
-            throw new Exception("File with file path {$this->path} does not exist.");
+            throw new BackendlessException( 'File with file path {$this->path} does not exist.' );
         
         }
         
@@ -34,7 +34,7 @@ class File {
     
     public function setFileName( $file_name ) {
         
-        $this->file_name  = $file_name;
+        $this->file_name = $file_name;
         return $this;
         
     }
@@ -52,7 +52,7 @@ class File {
         
     }
     
-    public function setFileContent($content) {
+    public function setFileContent( $content ) {
         
         $this->file_content = $content;
         return $this;
@@ -90,12 +90,12 @@ class File {
         
         if ( isset( $this->path ) ) {
             
-            $path_string = trim( $this->path, $charlist = "/" );
+            $path_string = trim( $this->path, $charlist = '/' );
             $path_string .= '/';
             
         }
         
-        return $path_string .=  trim( $this->file_name, $charlist = "/" );;
+        return $path_string .=  trim( $this->file_name, $charlist = '/' );
         
     }
    
