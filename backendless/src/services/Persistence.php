@@ -90,7 +90,18 @@ class Persistence
 
         if( !isset( $condition ) || $condition == '' ) {
             
-            throw new BackendlessException("Missing condition for bulk update");
+            throw new BackendlessException( 'Missing condition for bulk update' );
+            
+        }
+        
+        $table = $this->tryGetTableName();
+        
+        $this->cheackTargetTable( $table, __METHOD__ ); // if call method of() check target table and  table in data structure
+        $this->unsetTableName();
+        
+        if( $table != null ) {
+            
+            $data[ 'table-name' ] = $table;
             
         }
                 
@@ -103,9 +114,6 @@ class Persistence
             throw new BackendlessException("Do not set new value of properties for updating.");
             
         }
-        
-        $this->cheackTargetTable( $data_array['table'], __METHOD__ ); // if call method of() check target table and  table in data structure
-        $this->unsetTableName();
         
         $condition = 'where=' . urlencode( $condition );
                   
@@ -133,7 +141,7 @@ class Persistence
         
         if( !isset( $condition ) || $condition == '' ) {
             
-            throw new BackendlessException("Missing condition for bulk remove");
+            throw new BackendlessException( "Missing condition for bulk remove" );
             
         }
         
@@ -172,7 +180,7 @@ class Persistence
         }
         
         $relations_depth = ( $relations_depth === null )? "" : "?relationsDepth={$relations_depth}";
-            
+        
         return ( new BackendlessCollection( RequestBuilder::doRequest( 'data', $this->getTableName() .'/'. $object_id . $relations_depth, null, 'GET') ) )->getAsClass();
         
     }
@@ -306,9 +314,15 @@ class Persistence
         
         if( $declared_table != null ) {
             
+            if( array_key_exists( $object_type, $this->aliases ) ) {
+                
+                $object_type = $this->aliases[ $object_type ];
+                
+            }
+            
             if( $declared_table != $object_type ) {
                 
-                $method_name = explode("::", $method_name)[1];
+                $method_name = explode( "::", $method_name )[1];
                 
                 throw new BackendlessException( "Argument type error in call method: '{$method_name}()'. Argument data structure have type '$object_type' but "
                                             . "sets as '$declared_table'. Make sure that method ...->of('entity_name') equals argument "
@@ -317,7 +331,6 @@ class Persistence
             }
             
         }
-        
         
     }
 
