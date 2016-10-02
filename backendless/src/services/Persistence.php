@@ -127,7 +127,7 @@ class Persistence
         
         if( $object_id == null || $object_id == "" ) {
             
-            throw new BackendlessException( "Missing objectId for remove data", $code );
+            throw new BackendlessException( "Missing objectId for remove data", $code = null );
             
         }
         
