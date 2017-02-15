@@ -85,11 +85,11 @@ class Files
             
             if( !isset( $error[ 'message' ] ) ) {
                 
-                throw new Exception( 'API responce ' .$http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
+                throw new BackendlessException( 'API responce ' .$http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
                 
             } else {
                 
-                throw new Exception( $error[ 'message' ], $error[ 'code' ] );
+                throw new BackendlessException( $error[ 'message' ], $error[ 'code' ] );
                 
             }
 
@@ -151,11 +151,11 @@ class Files
             
             if( !isset( $error[ 'message' ] ) ) {
                 
-                throw new Exception( 'API responce ' . $http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
+                throw new BackendlessException( 'API responce ' . $http_request->getResponseStatus() . ' ' . $http_request->getResponseCode() . $http_request->getResponse() );
                 
             }else{
                 
-                throw new Exception( $error[ 'message' ], $error[ 'code' ] );
+                throw new BackendlessException( $error[ 'message' ], $error[ 'code' ] );
                 
             }
 
